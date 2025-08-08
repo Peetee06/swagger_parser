@@ -1610,11 +1610,11 @@ class OpenApiParser {
                 : map.containsKey(_anyOfConst)
                     ? _anyOfConst
                     : 'union';
-            final variants = (ofList is List) ? ofList.length : null;
+            final variants = ofList.length;
             final targetName = name ?? additionalName;
             stdout.writeln(
               'Warning: inline $unionKey without discriminator${targetName != null ? ' for $targetName' : ''}; '
-              'using dynamic.${variants != null ? ' Variants: $variants.' : ''}',
+              'using dynamic. Variants: $variants.',
             );
           }
         }

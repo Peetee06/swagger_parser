@@ -880,20 +880,6 @@ class OpenApiParser {
         );
 
         // Always alias non-discriminated unions via typedef for better ergonomics
-        // If this resolves to a dynamic-like type, print a helpful warning for users
-        if (typeWithImport.type.type == _objectConst) {
-          final unionKey = value.containsKey(_oneOfConst)
-              ? _oneOfConst
-              : value.containsKey(_anyOfConst)
-                  ? _anyOfConst
-                  : 'union';
-          final variants = (value[unionKey] is List)
-              ? (value[unionKey] as List).length
-              : null;
-          stdout.writeln(
-            'Warning: components/schemas/$key uses $unionKey without a discriminator; typedef will be dynamic.${variants != null ? ' Variants: $variants.' : ''}',
-          );
-        }
         parameters.add(typeWithImport.type);
         if (typeWithImport.import != null) {
           imports.add(typeWithImport.import!);

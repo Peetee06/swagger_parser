@@ -1562,18 +1562,6 @@ class OpenApiParser {
               // Default to dynamic or object.
               ofType =
                   UniversalType(type: _objectConst, isRequired: isRequired);
-              // Emit a warning for inline non-discriminated unions to aid users
-              final unionKey = map.containsKey(_oneOfConst)
-                  ? _oneOfConst
-                  : map.containsKey(_anyOfConst)
-                      ? _anyOfConst
-                      : 'union';
-              final variants = otherItems.length + nullItems.length;
-              final targetName = name ?? additionalName;
-              stdout.writeln(
-                'Warning: inline $unionKey without discriminator${targetName != null ? ' for $targetName' : ''}; '
-                'using dynamic. Variants: $variants.',
-              );
             }
           }
 
@@ -1600,23 +1588,6 @@ class OpenApiParser {
                 (root && !isRequired),
             deprecated: map[_deprecatedConst].toString().toBool() ?? false,
           );
-          // If we fell back to object for a oneOf/anyOf, print a warning as well
-          if ((map.containsKey(_oneOfConst) || map.containsKey(_anyOfConst)) &&
-              (map[_discriminatorConst] is! Map<String, dynamic> ||
-                  !(map[_discriminatorConst] as Map<String, dynamic>)
-                      .containsKey(_propertyNameConst))) {
-            final unionKey = map.containsKey(_oneOfConst)
-                ? _oneOfConst
-                : map.containsKey(_anyOfConst)
-                    ? _anyOfConst
-                    : 'union';
-            final variants = ofList.length;
-            final targetName = name ?? additionalName;
-            stdout.writeln(
-              'Warning: inline $unionKey without discriminator${targetName != null ? ' for $targetName' : ''}; '
-              'using dynamic. Variants: $variants.',
-            );
-          }
         }
 
         // Ensure name is applied to the ofType if it was determined
